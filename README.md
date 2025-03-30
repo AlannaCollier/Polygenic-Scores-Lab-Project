@@ -218,7 +218,7 @@ plot_chronotype <- create_scatter_plot(chronotype_merged, "Chronotype")
 
 ```
 
-###Linear Regressions
+### Linear Regressions
 
 Individual linear regressions were carried out for each trait, the results were then summarised into a table. 2 types of linear regressions were carried out on each trait and this resulted in 2 summary tables.
 
