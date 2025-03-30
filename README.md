@@ -47,7 +47,7 @@ Principal Components were extracted to capture population structure, which has a
 plink --bfile 1000G_LDpruned --pca 10 --out 1000G_PCA
 ```
 
-# Convert GWAS Summary Statistics to COJO format
+## Convert GWAS Summary Statistics to COJO format
 
 This is done to ensure SNP IDs, alleles and effect sizes match The 1000 Genomes Project dataset. The example below is for chronotype summary statistics, but similar editing was performed for all GWAS summary statistics.
 
