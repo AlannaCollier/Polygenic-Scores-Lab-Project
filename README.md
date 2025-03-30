@@ -218,3 +218,45 @@ plot_chronotype <- create_scatter_plot(chronotype_merged, "Chronotype")
 
 ```
 
+###Linear Regressions
+
+Individual linear regressions were carried out for each trait, the results were then summarised into a table. 2 types of linear regressions were carried out on each trait and this resulted in 2 summary tables.
+
+An example of the linear regressions carried out insomnia can be seen below, similar code was used for each trait.
+
+```R
+#linear regression to assess population structure bias in insomnia 
+
+insomnia_lm <- lm(SCORE1_AVG ~ PC1 + PC2 + PC3 + PC4 + PC5 + PC6 + PC7 + PC8 + PC9 + PC10, data=insomnia_merged)
+
+summary(insomnia_lm)
+
+
+insomnia_lm_pop <- lm(SCORE1_AVG ~ super_pop + PC1 + PC2 + PC3 + PC4 + PC5 + PC6 + PC7 + PC8 + PC9 + PC10, data=insomnia_merged)
+
+summary(insomnia_lm_pop)
+```
+
+### Scree plot 
+
+A scree plot was produced to see which PCs captured the largest proportion of variance in the data.
+
+```R
+# Extract eigenvalues (variance explained by each PC)
+eigenvalues <- pca_result$sdev^2
+
+# Create a dataframe for plotting
+scree_df <- data.frame(
+  PC = paste0("PC", 1:length(eigenvalues)),
+  Variance_Explained = eigenvalues / sum(eigenvalues)  # Proportion of variance
+)
+
+# Print eigenvalues and variance explained for each PC
+print(scree_df)
+
+
+
+plot(eigenvalues, type = "b",
+     xlab = "Principal Component",
+     ylab = "Eigenvalue")
+```
