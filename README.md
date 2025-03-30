@@ -146,6 +146,17 @@ merged_data <- adhd_pgs_data %>%
   drop_na
 ```
 
+The merged datasets for each trait were then combined together into one large dataset 
+
+```R
+#combine all merged datasets using the mutate function 
+combined_data <- bind_rows(
+  chronotype_merged %>% mutate(Trait = "Chronotype"),
+  insomnia_merged %>% mutate(Trait = "Insomnia"),
+  merged_data %>% mutate(Trait = "ADHD")
+)
+```
+
 ### PCA Plot 
 
 A PCA scatterplot was generated to confirm the genetic diversity within The 1000 Genomes Project dataset.
@@ -157,6 +168,53 @@ ggplot(insomnia_merged, aes(x=PC1, y=PC2, color=super_pop)) +
   theme_minimal()
 ```
 
+### Boxplots of PGS distribution for each trait 
 
+```R
+ggplot(combined_data, aes(x=Trait, y=SCORE1_AVG, fill=Trait)) +
+  geom_boxplot() +
+  labs(title="PGS Across Phenotype", x="Phenotype", y="Polygenic Score") +
+  theme_minimal()
+```
 
+### Boxplots of PGS grouped by ancestry 
+
+```R
+#side by side boxplots grouped by ancestry (population)
+ggplot(combined_data, aes(x=super_pop, y=SCORE1_AVG, fill=Trait)) +
+  geom_boxplot() +
+  labs(title="PGS Across Populations", x="Population", y="Polygenic Score") +
+  theme_minimal()
+```
+
+### Side by side scatterplots of PGS distribution across superpopulations with overlying boxplots
+
+```R
+# Determine global min and max PGS values across all datasets
+y_min <- min(merged_data$SCORE1_AVG, insomnia_merged$SCORE1_AVG, chronotype_merged$SCORE1_AVG, na.rm = TRUE)
+y_max <- max(merged_data$SCORE1_AVG, insomnia_merged$SCORE1_AVG, chronotype_merged$SCORE1_AVG, na.rm = TRUE)
+
+# Define function to create scatter plots with fixed y-axis range
+create_scatter_plot <- function(data, trait_name) {
+  ggplot(data, aes(x = super_pop, y = SCORE1_AVG, color = super_pop)) +
+    geom_jitter(width = 0.2, alpha = 0.6) +  # Jitter to avoid overlap
+    geom_boxplot(alpha = 0.2, outlier.shape = NA) +  # Boxplot for distribution
+    stat_smooth(method = "lm", se = FALSE, aes(group = 1), color = "black") +  # Regression line
+    theme_minimal() +
+    labs(title = paste( trait_name, "PGS"),
+         x = "Superpopulation",
+         y = "Polygenic Score (PGS)") +
+    ylim(y_min, y_max) +  # Set consistent y-axis range
+    theme(legend.position = "none")  # Hide legend since it's redundant
+}
+
+# Generate plots for each trait
+plot_adhd <- create_scatter_plot(merged_data, "ADHD")
+plot_insomnia <- create_scatter_plot(insomnia_merged, "Insomnia")
+plot_chronotype <- create_scatter_plot(chronotype_merged, "Chronotype")
+
+# Arrange plots side by side
+(plot_adhd | plot_insomnia | plot_chronotype)
+
+```
 
