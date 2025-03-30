@@ -112,11 +112,50 @@ plink --bfile 1000G_QC \
 --out 1000G_Chronotype_PGS
 ```
 
+## Performance metrics and Data Visualisation
 
+To analyse PGS distributions across populations, the PGS scores were combined with population labels and PCA components to make a single dataset for each trait. Below is an example of how this was done for ADHD
 
+```R
+#load in adhd data and rename columns
+adhd_pgs_data <- read.table("adhd_1kg_PRS.sscore", header=FALSE)
 
+head(adhd_pgs_data)
 
+colnames(adhd_pgs_data)[1] <- "FID"
+colnames(adhd_pgs_data)[2] <- "IID"
+colnames(adhd_pgs_data)[3] <- "ALLELE_CT"
+colnames(adhd_pgs_data)[4] <- "NAMED_ALLELE_DOSAGE_SUM"
+colnames(adhd_pgs_data)[5] <- "SCORE1_AVG"
 
+#load in population label data
+pop_data <- read.table("1000G_Merged_Population_Corrected.txt", header=TRUE)
+
+#load in pca data and rename columns 
+pca_data <- read.table("1kg_pca.eigenvec", header=FALSE)
+
+colnames(pca_data) <- c("FID", "IID", paste0("PC", 1:(ncol(pca_data)-2)))
+
+pca_data <- pca_data[, -1]
+
+#merge  ADHD PRS, PCA and population labels
+
+merged_data <- adhd_pgs_data %>%
+  inner_join(pop_data, by="IID") %>%
+  inner_join(pca_data, by="IID") %>%
+  drop_na
+```
+
+### PCA Plot 
+
+A PCA scatterplot was generated to confirm the genetic diversity within The 1000 Genomes Project dataset.
+
+```R
+ggplot(insomnia_merged, aes(x=PC1, y=PC2, color=super_pop)) +
+  geom_point(size=3, alpha=0.7) +
+  labs(title="PCA of 1000 Genomes with Insomnia PGS", x="PC1", y="PC2") +
+  theme_minimal()
+```
 
 
 
