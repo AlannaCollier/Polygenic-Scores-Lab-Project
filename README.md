@@ -170,6 +170,8 @@ ggplot(insomnia_merged, aes(x=PC1, y=PC2, color=super_pop)) +
 
 ### Boxplots of PGS distribution for each trait 
 
+To visualise how PGS distributions vary across traits (ADHD, insomnia and chronotype).
+
 ```R
 ggplot(combined_data, aes(x=Trait, y=SCORE1_AVG, fill=Trait)) +
   geom_boxplot() +
@@ -178,6 +180,8 @@ ggplot(combined_data, aes(x=Trait, y=SCORE1_AVG, fill=Trait)) +
 ```
 
 ### Boxplots of PGS grouped by ancestry 
+
+To viasualise how PGS distributions vary across traits that are grouped by superpopulation.
 
 ```R
 #side by side boxplots grouped by ancestry (population)
@@ -188,6 +192,8 @@ ggplot(combined_data, aes(x=super_pop, y=SCORE1_AVG, fill=Trait)) +
 ```
 
 ### Side by side scatterplots of PGS distribution across superpopulations with overlying boxplots
+
+Side by side scatterplots were created to reinforce and confirm the findings from the boxplots using a different visualisation type.
 
 ```R
 # Determine global min and max PGS values across all datasets
