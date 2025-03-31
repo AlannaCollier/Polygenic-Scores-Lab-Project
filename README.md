@@ -20,11 +20,12 @@ The main aims of this project are to:
 
 The 1000 Genomes dataset must be formatted for compatability SBayesRC in order to calculate PGS.
 
-<pre> ```bash 
-  # Download The 1000 Genomes data wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/*.vcf.gz 
+```bash 
+  # Download The 1000 Genomes data
+  wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/*.vcf.gz 
   # Convert Target data from VCF to PLINK format
   plink --vcf ALL.chr*.vcf.gz --make-bed --out 1000G
-  ``` </pre>
+  ``` 
 
   ### Quality Control (QC)
 
